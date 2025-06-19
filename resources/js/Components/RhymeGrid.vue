@@ -1,13 +1,13 @@
 <template>
-  <div aria-live="polite" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  <div aria-live="polite" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     <template v-for="(items, letter) in grouped" :key="letter">
       <section>
-        <h2 class="text-xl font-bold mb-2">{{ letter.toUpperCase() }}</h2>
+        <h2 class="text-lg font-semibold mb-2 text-indigo-600">{{ letter.toUpperCase() }}</h2>
         <div class="space-y-1">
           <div
             v-for="r in items"
             :key="r"
-            class="p-2 bg-gray-100 dark:bg-gray-800 rounded"
+            class="p-2 rounded-md bg-white dark:bg-gray-800 shadow"
           >
             {{ r }}
           </div>
