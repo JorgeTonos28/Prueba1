@@ -19,10 +19,13 @@ class WordSeeder extends Seeder
         ];
 
         foreach ($words as $data) {
-            $key = strrev(substr($data['word'], -3));
+            $parts = explode('-', $data['syllables']);
+            $slice = array_slice($parts, $data['stress_index']);
+            $key = implode('', array_reverse($slice));
+
             \App\Models\Word::updateOrCreate(
                 ['word' => $data['word']],
-                $data + ['rhyme_key' => $key]
+                $data + ['rhyme_key' => strtolower($key)]
             );
         }
     }
