@@ -14,7 +14,13 @@ class RhymeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'word' => ['required', 'string', 'alpha', 'min:2', 'max:30'],
+            'word' => [
+                'required',
+                'string',
+                'regex:/^[\pL]+$/u',
+                'min:2',
+                'max:30',
+            ],
         ];
     }
 }
