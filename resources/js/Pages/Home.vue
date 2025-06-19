@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import axios from 'axios';
 import { useDebounce } from '../composables/useDebounce';
 import RhymeGrid from '../Components/RhymeGrid.vue';
 
