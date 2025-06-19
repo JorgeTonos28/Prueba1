@@ -10,30 +10,39 @@ class RhymeService
 {
     public function findRhymes(string $word): array
     {
-        $word = Str::lower($word);
-        $key = Cache::rememberForever("rhyme_key:$word", function () use ($word) {
-            return Word::where('word', $word)->value('rhyme_key');
+        $normalized = Str::lower(Str::ascii($word));
+
+        $data = Cache::remember("rhymes:$normalized", 86400, function () use ($normalized) {
+            $entry = Word::where('word', $normalized)->first();
+            $key = $entry?->rhyme_key ?? $this->computeRhymeKey($normalized, $entry);
+
+            $rhymes = Word::where('rhyme_key', $key)
+                ->orderBy('word')
+                ->pluck('word')
+                ->all();
+
+            return [
+                'word' => $normalized,
+                'rhyme_key' => $key,
+                'rhymes' => $rhymes,
+            ];
         });
 
-        if (!$key) {
-            $key = $this->computeRhymeKey($word);
-        }
-
-        $rhymes = Cache::remember("rhymes:$key", 86400, function () use ($key) {
-            return Word::where('rhyme_key', $key)->orderBy('word')->pluck('word')->all();
-        });
-
-        return [
-            'word' => $word,
-            'rhyme_key' => $key,
-            'rhymes' => $rhymes,
-        ];
+        return $data;
     }
 
-    protected function computeRhymeKey(string $word): string
+    protected function computeRhymeKey(string $word, ?Word $entry = null): string
     {
-        $word = Str::lower(Str::ascii($word));
-        // simple heuristic: last 3 characters reversed
+        $entry ??= Word::where('word', $word)->first();
+
+        if ($entry) {
+            $parts = explode('-', $entry->syllables);
+            $slice = array_slice($parts, $entry->stress_index);
+            $key = implode('', array_reverse($slice));
+            return Str::lower(Str::ascii($key));
+        }
+
+        // fallback: last three letters reversed
         return Str::reverse(Str::substr($word, -3));
     }
 }
