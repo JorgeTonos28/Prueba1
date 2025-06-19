@@ -29,6 +29,7 @@ class RhymeApiTest extends TestCase
             ])
             ->assertJson([
                 'word' => 'cancion',
+                'rhyme_key' => 'noic',
             ]);
     }
 }

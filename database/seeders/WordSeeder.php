@@ -21,11 +21,12 @@ class WordSeeder extends Seeder
         foreach ($words as $data) {
             $parts = explode('-', $data['syllables']);
             $slice = array_slice($parts, $data['stress_index']);
-            $key = implode('', array_reverse($slice));
+            $joined = implode('', $slice);
+            $key = strtolower(strrev($joined));
 
             \App\Models\Word::updateOrCreate(
                 ['word' => $data['word']],
-                $data + ['rhyme_key' => strtolower($key)]
+                $data + ['rhyme_key' => $key]
             );
         }
     }

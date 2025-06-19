@@ -38,7 +38,8 @@ class RhymeService
         if ($entry) {
             $parts = explode('-', $entry->syllables);
             $slice = array_slice($parts, $entry->stress_index);
-            $key = implode('', array_reverse($slice));
+            $joined = implode('', $slice);
+            $key = Str::reverse($joined);
             return Str::lower(Str::ascii($key));
         }
 

@@ -24,7 +24,7 @@ class RhymeServiceTest extends TestCase
     {
         $data = $this->service->findRhymes('pasion');
 
-        $this->assertSame('sion', $data['rhyme_key']);
+        $this->assertSame('nois', $data['rhyme_key']);
         $this->assertSame(['pasion', 'vision'], $data['rhymes']);
     }
 }
